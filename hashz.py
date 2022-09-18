@@ -19,7 +19,6 @@ def hashz(string, key, output_length): # TODO: DRY code
 	def hashz_numbers(string):
 		pattern = re.compile("[0-9]+")
 		string_mod = hashlib.sha256(string.encode('utf-8')).hexdigest()[:output_length]
-		print(string_mod)
 		if not re.search(pattern, string_mod): return hashz_numbers(string_mod)
 
 		for m in re.finditer(pattern,string_mod):
@@ -38,12 +37,10 @@ def hashz(string, key, output_length): # TODO: DRY code
 			if position in positions: continue
 			string = replace_char(string, m.group()[0].upper(), position)
 			positions.append(position)
-			print("ideal2: "+string)
 			return string
 
 	def hashz_dot(string):
 		pattern = re.compile("[a-z]+")
-		#print(string)
 		string_mod = hashlib.sha256(string.encode('utf-8')).hexdigest()[:output_length]
 		if not re.search(pattern, string_mod): return hashz_dot(string_mod)
 		for m in re.finditer(pattern,string_mod):
