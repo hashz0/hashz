@@ -11,7 +11,7 @@ def insert(source_str, insert_str, pos):
 def replace_char(source_str, char, index):
 	return source_str[:index] + char + source_str[index+1:]
 
-def hashz(string, key, output_length): # TODO: DRY code
+def hashz(string, key, output_length): 
 	string = insert(key, string, int(len(key)/2))
 	string = hashlib.sha256(string.encode('utf-8')).hexdigest()[:output_length]
 	positions = list()
@@ -26,6 +26,7 @@ def hashz(string, key, output_length): # TODO: DRY code
 			string = replace_char(string, m.group()[0], position)
 			positions.append(position)
 			return string
+		return hashz_numbers(string_mod)
 
 	def hashz_capitals(string):
 		pattern = re.compile("[a-z]+")
@@ -38,6 +39,7 @@ def hashz(string, key, output_length): # TODO: DRY code
 			string = replace_char(string, m.group()[0].upper(), position)
 			positions.append(position)
 			return string
+		return hashz_capitals(string_mod)
 
 	def hashz_dot(string):
 		pattern = re.compile("[a-z]+")
@@ -49,11 +51,11 @@ def hashz(string, key, output_length): # TODO: DRY code
 			string = replace_char(string, ".", position)
 			positions.append(position)
 			return string
+		return hashz_dot(string_mod)
 
 	string = hashz_numbers(string)
 	string = hashz_capitals(string)
 	string = hashz_dot(string)
-
 	return(string)
 
 
