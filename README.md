@@ -6,7 +6,7 @@
 ```
 git clone https://github.com/hashz0/hashz
 cd hashz
-pip install kivy
+pip3 install kivy
 python3 hashz.py
 ```
 ### Install & Run on Android
