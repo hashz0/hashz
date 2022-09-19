@@ -11,7 +11,7 @@ def insert(source_str, insert_str, pos):
 def replace_char(source_str, char, index):
 	return source_str[:index] + char + source_str[index+1:]
 
-def hashz(string, key, output_length): 
+def hashz(string, key, output_length): # TODO: DRY code
 	string = insert(key, string, int(len(key)/2))
 	string = hashlib.sha256(string.encode('utf-8')).hexdigest()[:output_length]
 	positions = list()
@@ -67,6 +67,8 @@ def main():
 	key = args.key
 	outlen = args.outlen
 	if not outlen: outlen = 10
+	elif outlen<3:
+		print("Outlen must be minimum 3", file=sys.stderr)
 
 	if not key or len(key)<2:
 		print("Key is not provided or not valid (Minimum 2 symbols in length)", file=sys.stderr)
