@@ -1,9 +1,21 @@
-#!/usr/bin/env python
+from kivy.app import App
+from kivy.uix.label import Label
+from kivy.core.window import Window
+from kivy.uix.button import Button
+from kivy.uix.textinput import TextInput
+from kivy.uix.boxlayout import BoxLayout
+from kivy.core.clipboard import Clipboard
 
 import hashlib
 import sys
 import argparse
 import re
+
+from random import randint
+
+Window.size = (250,200)
+Window.clearcolor =  (255/255, 186/255, 3/255)
+Window.title = "Конвертер величин"
 
 def insert(source_str, insert_str, pos):
 	return source_str[:pos]+insert_str+source_str[pos:]
@@ -59,25 +71,48 @@ def hashz(string, key, output_length): # TODO: DRY code
 	return(string)
 
 
-def main():
-	parser = argparse.ArgumentParser()
-	parser.add_argument('-key', dest='key', type=str, help='your master key')
-	parser.add_argument('-outlen', dest='outlen', type=int, help='output string length (default is 10)')
-	args = parser.parse_args()
-	key = args.key
-	outlen = args.outlen
-	if not outlen: outlen = 10
-	elif outlen<3:
-		print("Outlen must be minimum 3", file=sys.stderr)
+class MyApp(App):
+	
 
-	if not key or len(key)<2:
-		print("Key is not provided or not valid (Minimum 2 symbols in length)", file=sys.stderr)
-		sys.exit(1)
+	def __init__(self):
+		super().__init__()
+		self.key_input = TextInput(hint_text='Master Key', password=True)
+		self.outlen_input = TextInput(hint_text='Outlen(default=10)', input_filter = 'int')
+		self.input_input = TextInput(hint_text='Input')
+		self.output_input = TextInput(hint_text='Output')
+		self.btn = Button(text="Copy to Clipboard")
+		self.key_input.bind(text=self.on_text)
+		self.input_input.bind(text=self.on_text)
+		self.outlen_input.bind(text=self.on_text)
+		self.btn.bind(on_release=self.btn_pressed)
+		self.inner_box = BoxLayout(orientation='horizontal')
 
-	while True:
-		for string in sys.stdin.readline().splitlines():
-			print(hashz(string, key, outlen),file=sys.stdout)
+	def on_text(self, *args):
+		outlen_text = 10	
+		if self.outlen_input.text != '': outlen_text = self.outlen_input.text
 
+		if self.key_input.text=='' or self.input_input.text=='': return
+		elif len(self.key_input.text)<2:
+			self.output_input.text='Master key must be minimum 2 characters long'
+			return
+		elif int(outlen_text)<3:
+			self.output_input.text='Outlen must be minimum 3'
+			return
+
+		self.output_input.text=hashz(self.input_input.text, self.key_input.text, int(outlen_text))
+
+	def btn_pressed(self, *args ):
+		Clipboard.copy(self.output_input.text)
+
+	def build(self):
+		box = BoxLayout(orientation='vertical')
+		box.add_widget(self.inner_box)
+		self.inner_box.add_widget(self.key_input)
+		self.inner_box.add_widget(self.outlen_input)
+		box.add_widget(self.input_input)
+		box.add_widget(self.output_input)
+		box.add_widget(self.btn)
+		return box
 
 if __name__ == "__main__":
-    main()
+	MyApp().run()
