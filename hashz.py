@@ -13,9 +13,8 @@ import re
 
 from random import randint
 
-Window.size = (250,200)
+Window.size = (270,120)
 Window.clearcolor =  (255/255, 186/255, 3/255)
-Window.title = "Конвертер величин"
 
 def insert(source_str, insert_str, pos):
 	return source_str[:pos]+insert_str+source_str[pos:]
@@ -95,8 +94,8 @@ class MyApp(App):
 		elif len(self.key_input.text)<2:
 			self.output_input.text='Master key must be minimum 2 characters long'
 			return
-		elif int(outlen_text)<3:
-			self.output_input.text='Outlen must be minimum 3'
+		elif int(outlen_text)<3 or int(outlen_text)>33:
+			self.output_input.text='Outlen must be between 3 and 33'
 			return
 
 		self.output_input.text=hashz(self.input_input.text, self.key_input.text, int(outlen_text))
@@ -105,6 +104,7 @@ class MyApp(App):
 		Clipboard.copy(self.output_input.text)
 
 	def build(self):
+		self.title = 'hashz'
 		box = BoxLayout(orientation='vertical')
 		box.add_widget(self.inner_box)
 		self.inner_box.add_widget(self.key_input)
