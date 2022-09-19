@@ -1,12 +1,16 @@
 # hashz
 
-### Install & Run
+
+### Install & Run on PC
+
 ```
 git clone https://github.com/hashz0/hashz
 cd hashz
 pip install kivy
 python3 hashz.py
 ```
+### Install & Run on Android
+Build it with buildozer, or just download precompiled binary from releases tab
 
 [I want CLI version!](https://github.com/hashz0/hashz-cli)
 
