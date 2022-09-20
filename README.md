@@ -18,3 +18,4 @@ Download precompiled binary from releases tab or build it with buildozer
 1. DRY-ify hashz main function
 2. Add safe mode for key importing
 3. Edit README.md
+4. Export (releases) for android, macos, linux, windows
